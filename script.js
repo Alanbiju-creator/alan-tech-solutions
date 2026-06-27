@@ -1,18 +1,45 @@
 // ===== Mobile hamburger menu =====
 const hamburger = document.getElementById('hamburger');
 const mobileNav = document.getElementById('mobileNav');
+const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+
+function openMobileNav(){
+  mobileNav.classList.add('open');
+  mobileNavOverlay.classList.add('open');
+  hamburger.classList.add('open');
+  hamburger.setAttribute('aria-expanded', 'true');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileNav(){
+  mobileNav.classList.remove('open');
+  mobileNavOverlay.classList.remove('open');
+  hamburger.classList.remove('open');
+  hamburger.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+
 hamburger.addEventListener('click', () => {
-  const isOpen = mobileNav.classList.toggle('open');
-  hamburger.classList.toggle('open');
-  hamburger.setAttribute('aria-expanded', isOpen);
-  document.body.style.overflow = isOpen ? 'hidden' : '';
+  const isOpen = mobileNav.classList.contains('open');
+  if (isOpen) {
+    closeMobileNav();
+  } else {
+    openMobileNav();
+  }
 });
+
+mobileNavOverlay.addEventListener('click', closeMobileNav);
+
 document.querySelectorAll('.mobile-nav a').forEach(a => {
-  a.addEventListener('click', () => {
-    mobileNav.classList.remove('open');
-    hamburger.classList.remove('open');
-    document.body.style.overflow = '';
-  });
+  a.addEventListener('click', closeMobileNav);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeMobileNav();
+});
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 768) closeMobileNav();
 });
 
 // ===== FAQ accordion =====
